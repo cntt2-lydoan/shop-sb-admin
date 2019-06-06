@@ -23,51 +23,29 @@ public class ShipperController {
         this.shipperService = shipperService;
     }
 
-    @GetMapping("/shippers")
-    public String list(Model model) {
+    @GetMapping("/admin/shippers")
+    public String shippers(Model model) {
         model.addAttribute("shippers", shipperService.findAll());
-        return "shippers/list";
-    }
-
-    @GetMapping("shippers/search")
-    public String search(@RequestParam("term") String term, Model model) {
-        if (StringUtils.isEmpty(term)) {
-            return "redirect:/shippers";
-        }
-        model.addAttribute("shippers", shipperService.search(term));
-        return "shippers/list";
-    }
-
-    @GetMapping("/shippers/add")
-    public String add(Model model) {
-        model.addAttribute("shipperModel", new ShipperModel());
-        return "shippers/form";
-    }
-
-    @GetMapping("/shippers/{id}/edit")
-    public String edit(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("shipperModel", shipperService.findById(id));
-        return "shippers/form";
+        return "admin/pages/shippers";
     }
 
     @PostMapping("/shippers/save")
-    public String save(@Valid ShipperModel shipper, BindingResult result, RedirectAttributes redirect) {
-        if (result.hasErrors()) {
-            return "shippers/form";
-        }
+    public String save(@Valid ShipperModel shipper, Model model) {
         shipperService.save(shipper);
-        redirect.addFlashAttribute("successMessage", "Saved shipper successfully!");
-        return "redirect:/shippers";
+        model.addAttribute("shippers", shipperService.findAll());
+        return "admin/pages/shippers";
     }
 
-    @GetMapping("/shippers/{id}/delete")
-    public String delete(@PathVariable Long id, RedirectAttributes redirect) {
+    @GetMapping("/admin/shippers/{id}/delete")
+    public String delete(@PathVariable Long id, RedirectAttributes redirect,Model model) {
         if (shipperService.delete(id)) {
             redirect.addFlashAttribute("successMessage", "Deleted shipper successfully!");
-            return "redirect:/shippers";
+            model.addAttribute("shippers", shipperService.findAll());
+            return "admin/pages/shippers";
         } else {
             redirect.addFlashAttribute("successMessage", "Not found!!!");
-            return "redirect:/shippers";
+            model.addAttribute("shippers", shipperService.findAll());
+            return "admin/pages/shippers";
         }
     }
 }

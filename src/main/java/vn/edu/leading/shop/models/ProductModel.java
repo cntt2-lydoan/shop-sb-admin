@@ -9,6 +9,7 @@ import lombok.Setter;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import sun.awt.image.URLImageSource;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -53,4 +54,10 @@ public class ProductModel extends BaseModel<ProductModel> {
     @BatchSize(size = 50)
     @JsonBackReference
     private List<OrderDetailModel> orderDetails = new ArrayList<>();
+
+    @Column(name = "url_image")
+    private String urlImage;
+
+    private String description;
+
 }
